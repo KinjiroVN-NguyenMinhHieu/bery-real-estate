@@ -1,0 +1,405 @@
+/* Mặc định cho màn hình nhỏ: 1rem = 12px */
+* {
+  font-size: 12px;
+  font-family: Karla;
+}
+
+.row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Sticky header */
+.navbar-header {
+  background-color: #e8f1ff;
+  padding: 24px 10% 24px 10%;
+  font-size: 1.2rem;
+}
+
+.nav-link {
+  font-family: Lora, sans-serif;
+  color: #132c3c;
+}
+
+.dropdown-menu {
+  display: none;
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+}
+
+.dropdown-item {
+  color: #132c3c;
+}
+
+.dropdown-divider {
+  background-color: #ae935c;
+  margin: 0;
+}
+
+.fa-cart-plus {
+  position: relative;
+}
+
+.fa-cart-plus .badge {
+  position: absolute;
+  background-color: #ff3c3c;
+  top: -100%;
+  right: -100%;
+}
+
+/* CSS để hiển thị dropdown khi di chuột vào trên desktop */
+@media (min-width: 768px) {
+  .navbar-nav {
+    align-items: center;
+  }
+
+  .nav-link:hover {
+    color: #ae935c;
+  }
+
+  .nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    left: 50%; /* Đặt left thành 50% */
+    transform: translateX(-50%); /* Dịch chuyển dropdown menu điều chỉnh giữa */
+  }
+
+  .dropdown-item:hover {
+    background-color: #ae935c;
+    color: #ffffff;
+  }
+
+  .nav-item.dropdown .dropdown-toggle::after {
+    display: none; /* Ẩn biểu tượng tam giác trỏ xuống */
+  }
+
+  #sticky-header .navbar-nav:first-child {
+    display: flex;
+    gap: 15%;
+  }
+
+  #login-icon:hover,
+  #cart-icon:hover {
+    color: #ae935c;
+  }
+}
+
+/* Hero Section */
+#hero-section {
+  position: relative;
+  background-image: url("/assets/images/breadcrumb/bg-1.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 513px;
+  padding: 0 10% 0 10%;
+  margin-top: 106px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1; /* Đảm bảo nội dung được hiển thị phía trên ảnh nền */
+  color: white; /* Màu chữ trắng để phản ánh trên overlay */
+}
+
+/* pseudo-element ::before được sử dụng để tạo overlay */
+#hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Overlay màu đen với độ mờ 50% */
+}
+
+#hero-section p {
+  font-size: 1.2rem;
+}
+
+#hero-section h1 {
+  font-size: 4rem;
+}
+
+/* Details Section */
+#details-section {
+  padding: 5rem 10% 3rem 10%;
+}
+
+#details-section .property-container {
+  margin-bottom: 2rem;
+}
+
+#details-section .employee-container {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+#details-section .property-container .card {
+  border: none;
+}
+
+#details-section .property-container .card .card-body {
+  background-color: #f0f0f0;
+}
+
+#details-section .property-container .card .card-footer {
+  background-color: #f0f0f0;
+}
+
+#details-section p {
+  color: #132c3c;
+}
+
+#details-section .property-container .card-info-title {
+  color: #132c3c;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+#details-section .property-container .property-title {
+  color: #ae935c;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+#details-section .employee-container .card {
+  background-color: #f0f0f0;
+  border: none;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+#details-section .employee-container .card p:last-child {
+  color: #ae935c;
+}
+
+/* Similar Properties Section */
+#similar-properties-section {
+  padding: 0 10% 5rem 10%;
+}
+
+#similar-properties-section p:first-child {
+  color: #ae935c;
+}
+
+#similar-properties-section h1 {
+  color: #132c3c;
+  margin-bottom: 3rem;
+}
+/* Dùng chung cho các card pagination */
+.estate-card {
+  border: none;
+  box-shadow: 5px 5px 5px rgba(200, 200, 200, 0.8);
+}
+.estate-card .estate-card-top {
+  position: relative;
+}
+
+.estate-card .estate-card-top .card-request {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.9);
+  left: 1rem;
+  bottom: 1rem;
+  padding: 5px;
+  border-radius: 5px;
+  color: #132c3c;
+}
+
+.estate-card .card-body {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.estate-card .card-body p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: grey;
+  font-size: 0.8rem;
+}
+
+.estate-card .card-body small {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: grey;
+  font-size: 0.8rem!important;
+}
+
+.estate-card .card-footer small {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #132c3c;
+  font-weight: bold;
+}
+
+.card-title {
+  color: #132c3c!important;
+  font-size: 1.2rem!important;
+  font-weight: bold;
+}
+
+.card-address {
+  text-decoration: underline;
+}
+
+.estate-card:hover {
+  transition: transform 0.3s ease;
+  transform: translate(0, -2%); /* Thay đổi giá trị này để điều chỉnh độ nhích lên */
+}
+
+.estate-card:not(:hover) {
+  transition: transform 0.3s ease;
+  transform: translate(0, 2%);/* Thay đổi giá trị này để điều chỉnh độ nhích xuống */
+}
+
+.estate-card:hover .estate-card-top {
+  cursor: pointer;
+}
+
+.card-title:hover {
+  cursor: pointer;
+  color: #ae935c!important;
+}
+
+.card-address:hover {
+  cursor: pointer;
+}
+
+#modify-property:hover {
+  cursor: pointer;
+}
+
+#like-property:hover {
+  cursor: pointer;
+}
+
+.page-link {
+  color: #132c3c;
+}
+
+.page-link:hover {
+  color: #ae935c;
+}
+
+/* Contact Section */
+#contact-section {
+  background-color: #132c3c;
+  height: 450px;
+  padding: 0 0 0 10%;
+}
+
+.contact-left {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  z-index: 2;
+}
+
+.contact-left p {
+  color: #ae935c;
+}
+
+.contact-left h1 {
+  color: #ffffff;
+}
+
+.contact-left .btn {
+  background-color: #ae935c;
+  color: #ffffff;
+  font-size: 1.2rem;
+}
+.contact-left .btn:hover {
+  background-color: #ffffff;
+  color: #132c3c;
+}
+
+.contact-right {
+  position: relative;
+}
+
+.contact-right img {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 1;
+}
+
+/* Footer Section */
+#footer-section {
+  padding: 5rem 10% 5rem 10%;
+}
+
+#footer-section li {
+  border: none;
+}
+
+#footer-section h4 {
+  color: #132c3c;
+}
+
+#footer-section li a {
+  color: var(--bs-list-group-color);
+  text-decoration: none;
+}
+
+#footer-section li a:hover {
+  color: #ae935c;
+  text-decoration: none;
+}
+
+#footer-section .social-icon {
+  color: #132c3c;
+}
+
+#footer-section .list-group-horizontal:last-child a {
+  color: #ae935c;
+}
+
+/* Màn hình trung bình: 1rem = 14px */
+@media screen and (min-width: 576px) {
+  * {
+    font-size: 14px;
+  }
+}
+
+/* Màn hình lớn: 1rem = 16px */
+@media screen and (min-width: 768px) {
+  * {
+    font-size: 16px;
+  }
+}
+
+/* btn back to top */
+/* Nút "Back to Top" */
+#btn-back-to-top {
+  display: none; /* Ẩn nút ban đầu */
+  position: fixed; /* Đặt nút ở vị trí cố định */
+  bottom: 50px; /* Cách dưới cùng của trang 20px */
+  right: 20px; /* Cách bên phải của trang 30px */
+  z-index: 99; /* Đảm bảo nút nằm trên các phần tử khác */
+  border: none; /* Không viền */
+  outline: none; /* Không viền ngoài khi chọn */
+  background-color: #132c3c; /* Màu nền */
+  color: white; /* Màu chữ */
+  cursor: pointer; /* Thay đổi con trỏ khi hover */
+  padding: 10px 16px; /* Khoảng đệm bên trong */
+  border-radius: 50%; /* Bo góc */
+}
+
+#btn-back-to-top:hover {
+  background-color: #ae935c; /* Màu nền khi hover */
+}
