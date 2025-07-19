@@ -7,15 +7,15 @@
 -- Phiên bản máy phục vụ: 10.4.18-MariaDB
 -- Phiên bản PHP: 8.0.5
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
+-- SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+-- START TRANSACTION;
+-- SET time_zone = "+00:00";
 
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+-- /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+-- /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+-- /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+-- /*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Cơ sở dữ liệu: `bery_real_estate`
@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `address_map` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PRIMARY KEY NOT NULL,
   `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `_lat` double NOT NULL,
   `_lng` double NOT NULL
@@ -51,7 +51,7 @@ INSERT INTO `address_map` (`id`, `address`, `_lat`, `_lng`) VALUES
 --
 
 CREATE TABLE `construction_contractor` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PRIMARY KEY NOT NULL,
   `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `fax` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -77,7 +77,7 @@ INSERT INTO `construction_contractor` (`id`, `description`, `email`, `fax`, `nam
 --
 
 CREATE TABLE `customers` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PRIMARY KEY NOT NULL,
   `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `contact_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `contact_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -203,7 +203,7 @@ INSERT INTO `customers` (`id`, `address`, `contact_name`, `contact_title`, `crea
 --
 
 CREATE TABLE `design_unit` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PRIMARY KEY NOT NULL,
   `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `fax` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -229,7 +229,7 @@ INSERT INTO `design_unit` (`id`, `description`, `email`, `fax`, `name`, `note`, 
 --
 
 CREATE TABLE `district` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PRIMARY KEY NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `_name` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `_prefix` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -959,7 +959,7 @@ INSERT INTO `district` (`id`, `created_at`, `_name`, `_prefix`, `updated_at`, `_
 --
 
 CREATE TABLE `employees` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PRIMARY KEY NOT NULL,
   `activated` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `birth_date` datetime DEFAULT NULL,
@@ -994,7 +994,8 @@ INSERT INTO `employees` (`id`, `activated`, `address`, `birth_date`, `city`, `co
 
 CREATE TABLE `employee_estate_rel` (
   `employee_id` int(11) NOT NULL,
-  `estate_id` int(11) NOT NULL
+  `estate_id` int(11) NOT NULL,
+  PRIMARY KEY (`employee_id`, `estate_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -1014,7 +1015,8 @@ INSERT INTO `employee_estate_rel` (`employee_id`, `estate_id`) VALUES
 
 CREATE TABLE `employee_role_rel` (
   `employee_id` int(11) NOT NULL,
-  `role_id` int(11) NOT NULL
+  `role_id` int(11) NOT NULL,
+  PRIMARY KEY (`employee_id`, `role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -1037,7 +1039,7 @@ INSERT INTO `employee_role_rel` (`employee_id`, `role_id`) VALUES
 --
 
 CREATE TABLE `investor` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PRIMARY KEY NOT NULL,
   `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `fax` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1063,7 +1065,7 @@ INSERT INTO `investor` (`id`, `description`, `email`, `fax`, `name`, `note`, `ph
 --
 
 CREATE TABLE `locations` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PRIMARY KEY NOT NULL,
   `latitude` float NOT NULL,
   `longitude` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1104,7 +1106,7 @@ INSERT INTO `locations` (`id`, `latitude`, `longitude`) VALUES
 --
 
 CREATE TABLE `master_layout` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PRIMARY KEY NOT NULL,
   `acreage` decimal(19,2) DEFAULT NULL,
   `apartment_list` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date_create` datetime DEFAULT NULL,
@@ -1131,7 +1133,7 @@ INSERT INTO `master_layout` (`id`, `acreage`, `apartment_list`, `date_create`, `
 --
 
 CREATE TABLE `photos` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PRIMARY KEY NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `real_estate_id` int(11) DEFAULT NULL
@@ -1244,7 +1246,7 @@ INSERT INTO `photos` (`id`, `name`, `url`, `real_estate_id`) VALUES
 --
 
 CREATE TABLE `project` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PRIMARY KEY NOT NULL,
   `acreage` decimal(19,2) DEFAULT NULL,
   `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `apartmentt_area` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1292,7 +1294,8 @@ INSERT INTO `project` (`id`, `acreage`, `address`, `apartmentt_area`, `construct
 
 CREATE TABLE `project_regionlink_rel` (
   `project_id` int(11) NOT NULL,
-  `regionlink_id` int(11) NOT NULL
+  `regionlink_id` int(11) NOT NULL,
+  PRIMARY KEY (`project_id`, `regionlink_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -1326,7 +1329,8 @@ INSERT INTO `project_regionlink_rel` (`project_id`, `regionlink_id`) VALUES
 
 CREATE TABLE `project_utility_rel` (
   `project_id` int(11) NOT NULL,
-  `utility_id` int(11) NOT NULL
+  `utility_id` int(11) NOT NULL,
+  PRIMARY KEY (`project_id`, `utility_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -1358,7 +1362,7 @@ INSERT INTO `project_utility_rel` (`project_id`, `utility_id`) VALUES
 --
 
 CREATE TABLE `province` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PRIMARY KEY NOT NULL,
   `_code` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `_name` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1441,7 +1445,7 @@ INSERT INTO `province` (`id`, `_code`, `created_at`, `_name`, `updated_at`) VALU
 --
 
 CREATE TABLE `realestate` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PRIMARY KEY NOT NULL,
   `acreage` decimal(19,2) DEFAULT NULL,
   `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `apart_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1528,7 +1532,7 @@ INSERT INTO `realestate` (`id`, `acreage`, `address`, `apart_code`, `bedroom`, `
 --
 
 CREATE TABLE `region_link` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PRIMARY KEY NOT NULL,
   `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `_lat` double DEFAULT NULL,
@@ -1561,7 +1565,7 @@ INSERT INTO `region_link` (`id`, `address`, `description`, `_lat`, `_lng`, `name
 --
 
 CREATE TABLE `roles` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PRIMARY KEY NOT NULL,
   `name` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -1581,7 +1585,7 @@ INSERT INTO `roles` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `street` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PRIMARY KEY NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `_name` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `_prefix` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -33277,7 +33281,7 @@ INSERT INTO `street` (`id`, `created_at`, `_name`, `_prefix`, `updated_at`, `_di
 --
 
 CREATE TABLE `subscriptions` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PRIMARY KEY NOT NULL,
   `authenticationtoken` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `contentencoding` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `endpoint` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -33302,7 +33306,7 @@ INSERT INTO `subscriptions` (`id`, `authenticationtoken`, `contentencoding`, `en
 --
 
 CREATE TABLE `utilities` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PRIMARY KEY NOT NULL,
   `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `photo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
@@ -33327,7 +33331,7 @@ INSERT INTO `utilities` (`id`, `description`, `name`, `photo`) VALUES
 --
 
 CREATE TABLE `ward` (
-  `id` int(11) NOT NULL,
+  `id` int(11) PRIMARY KEY NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `_name` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `_prefix` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -44642,21 +44646,21 @@ INSERT INTO `ward` (`id`, `created_at`, `_name`, `_prefix`, `updated_at`, `_dist
 --
 -- Chỉ mục cho bảng `address_map`
 --
-ALTER TABLE `address_map`
-  ADD PRIMARY KEY (`id`);
+-- ALTER TABLE `address_map`
+--   ADD PRIMARY KEY (`id`);
 
 --
 -- Chỉ mục cho bảng `construction_contractor`
 --
 ALTER TABLE `construction_contractor`
-  ADD PRIMARY KEY (`id`),
+--   ADD PRIMARY KEY (`id`),
   ADD KEY `FKrwac5v2f01il4otf00vis1hdd` (`address`);
 
 --
 -- Chỉ mục cho bảng `customers`
 --
 ALTER TABLE `customers`
-  ADD PRIMARY KEY (`id`),
+--   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `UK_rfbvkrffamfql7cjmen8v976v` (`email`),
   ADD UNIQUE KEY `UK_cuu4e61wdwoopdgsh61owqq2f` (`mobile`),
   ADD KEY `FK893lhkqrrmyse3hf9eb1hbv2e` (`created_by`),
@@ -44666,21 +44670,21 @@ ALTER TABLE `customers`
 -- Chỉ mục cho bảng `design_unit`
 --
 ALTER TABLE `design_unit`
-  ADD PRIMARY KEY (`id`),
+--   ADD PRIMARY KEY (`id`),
   ADD KEY `FKq3v192yr4v320s2a8sljbin48` (`address`);
 
 --
 -- Chỉ mục cho bảng `district`
 --
 ALTER TABLE `district`
-  ADD PRIMARY KEY (`id`),
+--   ADD PRIMARY KEY (`id`),
   ADD KEY `FKgp1m8eukxfu8j4s0h1vhvni6i` (`_province_id`);
 
 --
 -- Chỉ mục cho bảng `employees`
 --
 ALTER TABLE `employees`
-  ADD PRIMARY KEY (`id`),
+--   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `UK_j9xgmd0ya5jmus09o0b8pqrpb` (`email`),
   ADD UNIQUE KEY `UK_iy2domikp7lboho3cmhqyj7ud` (`user_name`);
 
@@ -44688,48 +44692,48 @@ ALTER TABLE `employees`
 -- Chỉ mục cho bảng `employee_estate_rel`
 --
 ALTER TABLE `employee_estate_rel`
-  ADD PRIMARY KEY (`employee_id`,`estate_id`),
+--   ADD PRIMARY KEY (`employee_id`,`estate_id`),
   ADD KEY `FK7i2ch4a1ljr9ldto861rm3kub` (`estate_id`);
 
 --
 -- Chỉ mục cho bảng `employee_role_rel`
 --
 ALTER TABLE `employee_role_rel`
-  ADD PRIMARY KEY (`employee_id`,`role_id`),
+--   ADD PRIMARY KEY (`employee_id`,`role_id`),
   ADD KEY `FKiiryjl7d65nseuosahehpbn1u` (`role_id`);
 
 --
 -- Chỉ mục cho bảng `investor`
 --
 ALTER TABLE `investor`
-  ADD PRIMARY KEY (`id`),
+--   ADD PRIMARY KEY (`id`),
   ADD KEY `FKfnxvoj1ab230rlj08olep7ugm` (`address`);
 
 --
 -- Chỉ mục cho bảng `locations`
 --
-ALTER TABLE `locations`
-  ADD PRIMARY KEY (`id`);
+-- ALTER TABLE `locations`
+--   ADD PRIMARY KEY (`id`);
 
 --
 -- Chỉ mục cho bảng `master_layout`
 --
 ALTER TABLE `master_layout`
-  ADD PRIMARY KEY (`id`),
+--   ADD PRIMARY KEY (`id`),
   ADD KEY `FKhe4slk9awl9sdxbwero57kjws` (`project_id`);
 
 --
 -- Chỉ mục cho bảng `photos`
 --
 ALTER TABLE `photos`
-  ADD PRIMARY KEY (`id`),
+--   ADD PRIMARY KEY (`id`),
   ADD KEY `FKeeq1uvr52qgkblipivjhblncx` (`real_estate_id`);
 
 --
 -- Chỉ mục cho bảng `project`
 --
 ALTER TABLE `project`
-  ADD PRIMARY KEY (`id`),
+--   ADD PRIMARY KEY (`id`),
   ADD KEY `FK15sl0igtj61ohb7kmdk4vv2b4` (`construction_contractor`),
   ADD KEY `FKntg18r0145ca69xw7ws4ghs5o` (`design_unit`),
   ADD KEY `FK8dylmhk5f6hgudljfo3r0kjg7` (`district_id`),
@@ -44742,27 +44746,27 @@ ALTER TABLE `project`
 -- Chỉ mục cho bảng `project_regionlink_rel`
 --
 ALTER TABLE `project_regionlink_rel`
-  ADD PRIMARY KEY (`project_id`,`regionlink_id`),
+--   ADD PRIMARY KEY (`project_id`,`regionlink_id`),
   ADD KEY `FK45cntxmb10cclhl9w71scbxd4` (`regionlink_id`);
 
 --
 -- Chỉ mục cho bảng `project_utility_rel`
 --
 ALTER TABLE `project_utility_rel`
-  ADD PRIMARY KEY (`project_id`,`utility_id`),
+--   ADD PRIMARY KEY (`project_id`,`utility_id`),
   ADD KEY `FK6pqdycat13gmf1rc64j5mmbcc` (`utility_id`);
 
 --
 -- Chỉ mục cho bảng `province`
 --
-ALTER TABLE `province`
-  ADD PRIMARY KEY (`id`);
+-- ALTER TABLE `province`
+--   ADD PRIMARY KEY (`id`);
 
 --
 -- Chỉ mục cho bảng `realestate`
 --
 ALTER TABLE `realestate`
-  ADD PRIMARY KEY (`id`),
+--   ADD PRIMARY KEY (`id`),
   ADD KEY `FK4438hrjk25wgwq700ui6q8tm4` (`created_by`),
   ADD KEY `FKfghmfvfbqgnsxiu0biimqwd2s` (`district_id`),
   ADD KEY `FKhfdd68fxrp765ylwxmtui0cbh` (`employee_id`),
@@ -44775,40 +44779,40 @@ ALTER TABLE `realestate`
 --
 -- Chỉ mục cho bảng `region_link`
 --
-ALTER TABLE `region_link`
-  ADD PRIMARY KEY (`id`);
+-- ALTER TABLE `region_link`
+--   ADD PRIMARY KEY (`id`);
 
 --
 -- Chỉ mục cho bảng `roles`
 --
-ALTER TABLE `roles`
-  ADD PRIMARY KEY (`id`);
+-- ALTER TABLE `roles`
+--   ADD PRIMARY KEY (`id`);
 
 --
 -- Chỉ mục cho bảng `street`
 --
 ALTER TABLE `street`
-  ADD PRIMARY KEY (`id`),
+--   ADD PRIMARY KEY (`id`),
   ADD KEY `FKp6cf3fxyhs9spa3ylluwcgc0c` (`_district_id`),
   ADD KEY `FKdwscgtou85jkg3pxcgxdwjcnt` (`_province_id`);
 
 --
 -- Chỉ mục cho bảng `subscriptions`
 --
-ALTER TABLE `subscriptions`
-  ADD PRIMARY KEY (`id`);
+-- ALTER TABLE `subscriptions`
+--   ADD PRIMARY KEY (`id`);
 
 --
 -- Chỉ mục cho bảng `utilities`
 --
-ALTER TABLE `utilities`
-  ADD PRIMARY KEY (`id`);
+-- ALTER TABLE `utilities`
+--   ADD PRIMARY KEY (`id`);
 
 --
 -- Chỉ mục cho bảng `ward`
 --
 ALTER TABLE `ward`
-  ADD PRIMARY KEY (`id`),
+--   ADD PRIMARY KEY (`id`),
   ADD KEY `FK2by7ekpyyb2ugyrp3w9msb95q` (`_district_id`),
   ADD KEY `FKdv79xc6vu50ymeiqg4t3vvmcg` (`_province_id`);
 
@@ -45045,6 +45049,3 @@ ALTER TABLE `ward`
   ADD CONSTRAINT `FKdv79xc6vu50ymeiqg4t3vvmcg` FOREIGN KEY (`_province_id`) REFERENCES `province` (`id`);
 COMMIT;
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
