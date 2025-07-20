@@ -1,14 +1,12 @@
-# Step 1: Use OpenJDK image as base
-FROM eclipse-temurin:17-jdk-alpine
-
-# Step 2: Set working directory inside container
+# Stage 1: Build the application
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
+COPY . .
+RUN ./mvnw clean package -DskipTests
 
-# Step 3: Copy the jar file into the container
-COPY target/bery-real-estate-0.0.1-SNAPSHOT.jar app.jar
-
-# Step 4: Expose the port your app listens to (Render uses PORT env var)
+# Stage 2: Run the app
+FROM eclipse-temurin:17-jdk-alpine
+WORKDIR /app
+COPY --from=build /app/target/bery-real-estate-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
-
-# Step 5: Set the command to run the app
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "app.jar"]
