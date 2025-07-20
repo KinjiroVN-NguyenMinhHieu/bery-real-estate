@@ -1,0 +1,13 @@
+envVars:
+  - key: DB_URL
+  - key: DB_USERNAME
+  - key: DB_PASSWORD
+  - key: REDIS_HOST
+  - key: REDIS_PORT
+  - key: REDIS_PASSWORD
+  - key: MAIL_USERNAME
+  - key: MAIL_PASSWORD
+  - key: JWT_SECRET
+  - key: JWT_EXPIRATION_MS
+  - key: FORGOT_PW_EXPIRATION_MS
+  - key: APP_BASE_URL
