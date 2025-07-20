@@ -1,7 +1,7 @@
 services:
   - type: web
     name: bery-real-estate
-    env: java
+    runtime: java
     buildCommand: ./mvnw clean install
     startCommand: java -jar target/bery-real-estate-0.0.1-SNAPSHOT.jar
     envVars:
