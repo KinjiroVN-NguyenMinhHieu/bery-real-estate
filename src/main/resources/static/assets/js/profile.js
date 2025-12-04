@@ -145,29 +145,30 @@ function callAPIVerifyUser(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/verify",
-      method: "GET",
-      headers: headers,
-      success: function(paramData) {
-        $("#user-name").html(paramData.username);
-        $("#cart-icon .badge").html(paramData.realEstatesCount);
-        //check danh tính ng dùng
-        let username = $(".employee-container .card-info-title").text();
-        if(username === paramData.username) {
-          $("#modify-property").removeClass("d-none")
-        }
-      },
-      error: function(error) {
-        try {
-          const responseObject = JSON.parse(error.responseText);
-          showToast(3, responseObject.message);
-        } catch (e) {
-          showToast(3, error.responseText || error.statusText);
-        }
-        resetLogin();
+    url: gAUTH_URL + "/verify",
+    method: "GET",
+    headers: headers,
+    success: function(paramData) {
+      $("#user-name").html(paramData.username);
+      $("#cart-icon .badge").html(paramData.realEstatesCount);
+      //check danh tính ng dùng
+      let username = $(".employee-container .card-info-title").text();
+      if(username === paramData.username) {
+        $("#modify-property").removeClass("d-none")
       }
+    },
+    error: function(error) {
+      try {
+        const responseObject = JSON.parse(error.responseText);
+        showToast(3, responseObject.message);
+      } catch (e) {
+        showToast(3, error.responseText || error.statusText);
+      }
+      resetLogin();
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -177,7 +178,7 @@ function callAPIVerifyAdmin(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     url: gAUTH_URL + "/verify-admin",
     method: "GET",
@@ -194,7 +195,8 @@ function callAPIVerifyAdmin(paramAccessToken) {
       } catch (e) {
         showToast(3, error.responseText || error.statusText);
       }
-    }
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -204,22 +206,23 @@ function callAPILogout(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/logout",
-      method: "PUT",
-      headers: headers,
-      success: function(paramData) {
-        resetLogin();
-      },
-      error: function(error) {
-        try {
-          const responseObject = JSON.parse(error.responseText);
-          showToast(3, responseObject.message);
-        } catch (e) {
-          showToast(3, error.responseText || error.statusText);
-        }
+    url: gAUTH_URL + "/logout",
+    method: "PUT",
+    headers: headers,
+    success: function(paramData) {
+      resetLogin();
+    },
+    error: function(error) {
+      try {
+        const responseObject = JSON.parse(error.responseText);
+        showToast(3, responseObject.message);
+      } catch (e) {
+        showToast(3, error.responseText || error.statusText);
       }
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -229,22 +232,23 @@ function callAPIGetProfileUser(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/profile",
-      method: "GET",
-      headers: headers,
-      success: function(paramData) {
-        handleDataProfile(paramData);
-      },
-      error: function(error) {
-        try {
-          const responseObject = JSON.parse(error.responseText);
-          showToast(3, responseObject.message);
-        } catch (e) {
-          showToast(3, error.responseText || error.statusText);
-        }
+    url: gAUTH_URL + "/profile",
+    method: "GET",
+    headers: headers,
+    success: function(paramData) {
+      handleDataProfile(paramData);
+    },
+    error: function(error) {
+      try {
+        const responseObject = JSON.parse(error.responseText);
+        showToast(3, responseObject.message);
+      } catch (e) {
+        showToast(3, error.responseText || error.statusText);
       }
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -266,7 +270,7 @@ function callAPIChangeProfile(paramAccessToken, paramProfileObj) {
       paramProfileObj[key] ? formData.append(key, paramProfileObj[key]) : null;
     }
   }
-
+  blockUI();
   $.ajax({
     type: "PUT",
     headers: headers,
@@ -287,6 +291,7 @@ function callAPIChangeProfile(paramAccessToken, paramProfileObj) {
         showToast(3, error.responseText || error.statusText);
       }
     },
+    finally: unblockUI(),
   });
 }
 
@@ -426,22 +431,4 @@ function resetLogin() {
   Cookies.remove('accessToken');
   sessionStorage.removeItem('accessToken');
   window.location.href = gHOME_URL;
-}
-
-// Hàm hiển thị thông báo
-function showToast(paramType, paramMessage) {
-  switch (paramType) {
-    case 1: //success
-      toastr.success(paramMessage);
-      break;
-    case 2: //info
-      toastr.info(paramMessage);
-      break;
-    case 3: //error
-      toastr.error(paramMessage);
-      break;
-    case 4: //warning
-      toastr.warning(paramMessage);
-      break;
-  }
 }

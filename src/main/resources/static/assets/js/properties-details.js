@@ -203,6 +203,7 @@ function onBtnLogout() {
 //API
 function callAPIGetRealEstateById(paramId) {
   return new Promise((resolve, reject) => {
+    blockUI();
     $.ajax({
       type: "get",
       url: gBASE_URL + "/" + paramId,
@@ -222,7 +223,8 @@ function callAPIGetRealEstateById(paramId) {
           showToast(3, error.responseText || error.statusText);
         }
         reject(error);
-      }
+      },
+      finally: unblockUI(),
     });
   });
 }
@@ -243,6 +245,7 @@ function callAPIGetRealEstateSimilar(
     vQueryParams.append("type", paramData.type);
   if (paramData.request !== null)
     vQueryParams.append("request", paramData.request);
+  blockUI();
   $.ajax({
     type: "get",
     url: gBASE_URL + "/pagination/search-and-filter?" + vQueryParams.toString(),
@@ -259,6 +262,7 @@ function callAPIGetRealEstateSimilar(
         showToast(3, error.responseText || error.statusText);
       }
     },
+    finally: unblockUI(),
   });
 }
 
@@ -268,7 +272,7 @@ function callAPIGeocodeAddress(paramAddress) {
   return new Promise(function(resolve, reject) {
     // Xây dựng URL cho yêu cầu geocoding, mã hóa địa chỉ để phù hợp với định dạng URL
     let photonURL = `https://photon.komoot.io/api/?q=${encodeURIComponent(paramAddress)}`;
-
+    blockUI();
     // Sử dụng AJAX để gửi yêu cầu GET đến API geocoding
     $.ajax({
       url: photonURL, // URL của API Photon
@@ -294,7 +298,8 @@ function callAPIGeocodeAddress(paramAddress) {
           showToast(3, error.responseText || error.statusText);
         }
         reject(error);
-      }
+      },
+      finally: unblockUI(),
     });
   });
 }
@@ -305,31 +310,32 @@ function callAPIVerifyUser(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/verify",
-      method: "GET",
-      headers: headers,
-      success: function(paramData) {
-        $("#user-name").html(paramData.username);
-        $("#cart-icon .badge").html(paramData.realEstatesCount);
-        //check danh tính ng dùng
-        let username = $(".employee-container .card-info-title").text();
-        if (username === paramData.username) {
-          $("#modify-property").removeClass("d-none");
-        } else {
-          $("#like-property").removeClass("d-none");
-        }
-      },
-      error: function(error) {
-        try {
-          const responseObject = JSON.parse(error.responseText);
-          showToast(3, responseObject.message);
-        } catch (e) {
-          showToast(3, error.responseText || error.statusText);
-        }
-        resetLogin();
+    url: gAUTH_URL + "/verify",
+    method: "GET",
+    headers: headers,
+    success: function(paramData) {
+      $("#user-name").html(paramData.username);
+      $("#cart-icon .badge").html(paramData.realEstatesCount);
+      //check danh tính ng dùng
+      let username = $(".employee-container .card-info-title").text();
+      if (username === paramData.username) {
+        $("#modify-property").removeClass("d-none");
+      } else {
+        $("#like-property").removeClass("d-none");
       }
+    },
+    error: function(error) {
+      try {
+        const responseObject = JSON.parse(error.responseText);
+        showToast(3, responseObject.message);
+      } catch (e) {
+        showToast(3, error.responseText || error.statusText);
+      }
+      resetLogin();
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -339,7 +345,7 @@ function callAPIVerifyAdmin(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     url: gAUTH_URL + "/verify-admin",
     method: "GET",
@@ -356,7 +362,8 @@ function callAPIVerifyAdmin(paramAccessToken) {
       } catch (e) {
         showToast(3, error.responseText || error.statusText);
       }
-    }
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -366,26 +373,27 @@ function callAPICheckFavourite(paramId, paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/isfavourite/" + paramId,
-      method: "GET",
-      headers: headers,
-      success: function(paramData) {
-        if(paramData) {
-          $(".like-property").removeClass("d-none");
-        } else {
-          $(".unlike-property").removeClass("d-none");
-        }
-      },
-      error: function(error) {
-        try {
-          const responseObject = JSON.parse(error.responseText);
-          showToast(3, responseObject.message);
-        } catch (e) {
-          showToast(3, error.responseText || error.statusText);
-        }
+    url: gAUTH_URL + "/isfavourite/" + paramId,
+    method: "GET",
+    headers: headers,
+    success: function(paramData) {
+      if(paramData) {
+        $(".like-property").removeClass("d-none");
+      } else {
+        $(".unlike-property").removeClass("d-none");
       }
+    },
+    error: function(error) {
+      try {
+        const responseObject = JSON.parse(error.responseText);
+        showToast(3, responseObject.message);
+      } catch (e) {
+        showToast(3, error.responseText || error.statusText);
+      }
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -395,25 +403,26 @@ function callAPIAddFavouriteProperty(paramId, paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/favourite/" + paramId,
-      method: "POST",
-      headers: headers,
-      success: function(paramData) {
-        showToast(1, "Property added to favorites successfully");
-      },
-      error: function(error) {
-        $(".unlike-property").removeClass("d-none");
-        $(".like-property").addClass("d-none");
+    url: gAUTH_URL + "/favourite/" + paramId,
+    method: "POST",
+    headers: headers,
+    success: function(paramData) {
+      showToast(1, "Property added to favorites successfully");
+    },
+    error: function(error) {
+      $(".unlike-property").removeClass("d-none");
+      $(".like-property").addClass("d-none");
 
-        try {
-          const responseObject = JSON.parse(error.responseText);
-          showToast(3, responseObject.message);
-        } catch (e) {
-          showToast(3, error.responseText || error.statusText);
-        }
+      try {
+        const responseObject = JSON.parse(error.responseText);
+        showToast(3, responseObject.message);
+      } catch (e) {
+        showToast(3, error.responseText || error.statusText);
       }
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -423,25 +432,26 @@ function callAPIRemoveFavouriteProperty(paramId, paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/favourite/" + paramId,
-      method: "PUT",
-      headers: headers,
-      success: function(paramData) {
-        showToast(1, "Property removed to favorites successfully");
-      },
-      error: function(error) {
-        $(".unlike-property").addClass("d-none");
-        $(".like-property").removeClass("d-none");
+    url: gAUTH_URL + "/favourite/" + paramId,
+    method: "PUT",
+    headers: headers,
+    success: function(paramData) {
+      showToast(1, "Property removed to favorites successfully");
+    },
+    error: function(error) {
+      $(".unlike-property").addClass("d-none");
+      $(".like-property").removeClass("d-none");
 
-        try {
-          const responseObject = JSON.parse(error.responseText);
-          showToast(3, responseObject.message);
-        } catch (e) {
-          showToast(3, error.responseText || error.statusText);
-        }       
-      }
+      try {
+        const responseObject = JSON.parse(error.responseText);
+        showToast(3, responseObject.message);
+      } catch (e) {
+        showToast(3, error.responseText || error.statusText);
+      }       
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -450,7 +460,7 @@ function callAPIDeleteRealEstateById(paramId, paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     url: gBASE_URL + "/" + paramId,
     method: "DELETE",
@@ -470,6 +480,7 @@ function callAPIDeleteRealEstateById(paramId, paramAccessToken) {
         showToast(3, error.responseText || error.statusText);
       }
     },
+    finally: unblockUI(),
   });
 }
 
@@ -478,7 +489,7 @@ function callAPICompleteRealEstateById(paramId, paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     url: gBASE_URL + "/complete/" + paramId,
     method: "POST",
@@ -498,6 +509,7 @@ function callAPICompleteRealEstateById(paramId, paramAccessToken) {
         showToast(3, error.responseText || error.statusText);
       }
     },
+    finally: unblockUI(),
   });
 }
 
@@ -506,7 +518,7 @@ function callAPIRestoreRealEstateById(paramId, paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     url: gBASE_URL + "/restore/" + paramId,
     method: "POST",
@@ -526,6 +538,7 @@ function callAPIRestoreRealEstateById(paramId, paramAccessToken) {
         showToast(3, error.responseText || error.statusText);
       }
     },
+    finally: unblockUI(),
   });
 }
 
@@ -535,22 +548,23 @@ function callAPILogout(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/logout",
-      method: "PUT",
-      headers: headers,
-      success: function(paramData) {
-        resetLogin();
-      },
-      error: function(error) {
-        try {
-          const responseObject = JSON.parse(error.responseText);
-          showToast(3, responseObject.message);
-        } catch (e) {
-          showToast(3, error.responseText || error.statusText);
-        }
+    url: gAUTH_URL + "/logout",
+    method: "PUT",
+    headers: headers,
+    success: function(paramData) {
+      resetLogin();
+    },
+    error: function(error) {
+      try {
+        const responseObject = JSON.parse(error.responseText);
+        showToast(3, responseObject.message);
+      } catch (e) {
+        showToast(3, error.responseText || error.statusText);
       }
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -851,22 +865,4 @@ function resetLogin() {
   Cookies.remove('accessToken');
   sessionStorage.removeItem('accessToken');
   window.location.href = gHOME_URL;
-}
-
-// Hàm hiển thị thông báo
-function showToast(paramType, paramMessage) {
-  switch (paramType) {
-    case 1: //success
-      toastr.success(paramMessage);
-      break;
-    case 2: //info
-      toastr.info(paramMessage);
-      break;
-    case 3: //error
-      toastr.error(paramMessage);
-      break;
-    case 4: //warning
-      toastr.warning(paramMessage);
-      break;
-  }
 }

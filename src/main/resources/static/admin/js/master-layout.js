@@ -228,7 +228,7 @@ function callAPIGetAllLayout(paramQueryObj) {
     Authorization: "Bearer " + getAccessToken(),
   };
   const vQueryParams = new URLSearchParams(paramQueryObj);
-
+  blockUI();
   $.ajax({
     url: gBASE_URL + "/master-layouts?" + vQueryParams.toString(),
     headers: headers,
@@ -241,8 +241,9 @@ function callAPIGetAllLayout(paramQueryObj) {
       createPagination(gCurrentPage + 1);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -251,7 +252,7 @@ function callAPIGetAllProjects(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken,
   };
-
+  blockUI();
   $.ajax({
     url: gBASE_URL + "/projects/all",
     headers: headers,
@@ -260,8 +261,9 @@ function callAPIGetAllProjects(paramAccessToken) {
       loadDataToProjectSelect(paramData);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -270,7 +272,7 @@ function callAPIGetLayoutById(paramAccessToken, paramId) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     url: gBASE_URL + "/master-layouts/" + paramId,
     headers: headers,
@@ -279,8 +281,9 @@ function callAPIGetLayoutById(paramAccessToken, paramId) {
       handleLoadDataToForm(res);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -289,7 +292,7 @@ function callAPICreateLayout(paramAccessToken, paramDataObj) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     type: "POST",
     headers: headers,
@@ -302,8 +305,9 @@ function callAPICreateLayout(paramAccessToken, paramDataObj) {
       createPage(1);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -312,7 +316,7 @@ function callAPIUpdateLayout(paramAccessToken, paramId, paramDataObj) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     type: "PUT",
     headers: headers,
@@ -325,8 +329,9 @@ function callAPIUpdateLayout(paramAccessToken, paramId, paramDataObj) {
       createPage(1);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -335,7 +340,7 @@ function callAPIDeleteLayout(paramId, paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     url: gBASE_URL + "/master-layouts/" + paramId,
     method: "DELETE",
@@ -346,8 +351,9 @@ function callAPIDeleteLayout(paramId, paramAccessToken) {
       createPage(1);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -357,19 +363,20 @@ function callAPIVerifyAdmin(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/verify-admin",
-      method: "GET",
-      headers: headers,
-      success: function(paramData) {
-        if(!paramData) {
-          window.location.href = gHOME_URL;
-        }
-      },
-      error: function(error) {
-        handleError(error);
+    url: gAUTH_URL + "/verify-admin",
+    method: "GET",
+    headers: headers,
+    success: function(paramData) {
+      if(!paramData) {
+        window.location.href = gHOME_URL;
       }
+    },
+    error: function(error) {
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -379,19 +386,20 @@ function callAPIVerifyUser(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/verify",
-      method: "GET",
-      headers: headers,
-      success: function(paramData) {
-        $(".user-name").html(paramData.username);
-        $("#cart-icon .badge").html(paramData.realEstatesCount);
-      },
-      error: function(error) {
-        handleError(error);
-        resetLogin();
-      }
+    url: gAUTH_URL + "/verify",
+    method: "GET",
+    headers: headers,
+    success: function(paramData) {
+      $(".user-name").html(paramData.username);
+      $("#cart-icon .badge").html(paramData.realEstatesCount);
+    },
+    error: function(error) {
+      handleError(error);
+      resetLogin();
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -401,17 +409,18 @@ function callAPILogout(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/logout",
-      method: "PUT",
-      headers: headers,
-      success: function(paramData) {
-        resetLogin();
-      },
-      error: function(error) {
-        handleError(error);
-      }
+    url: gAUTH_URL + "/logout",
+    method: "PUT",
+    headers: headers,
+    success: function(paramData) {
+      resetLogin();
+    },
+    error: function(error) {
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -508,33 +517,6 @@ function convertDateFormat(paramDateString) {
   if (paramDateString) {
     const dateParts = paramDateString.split("-");
     return dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
-  }
-}
-
-// Hàm hiển thị thông báo
-function showToast(paramType, paramMessage) {
-  switch (paramType) {
-    case 1: //success
-      toastr.success(paramMessage);
-      break;
-    case 2: //info
-      toastr.info(paramMessage);
-      break;
-    case 3: //error
-      toastr.error(paramMessage);
-      break;
-    case 4: //warning
-      toastr.warning(paramMessage);
-      break;
-  }
-}
-
-function handleError(error) {
-  try {
-    const responseObject = JSON.parse(error.responseText);
-    showToast(3, responseObject.message);
-  } catch (e) {
-    showToast(3, error.responseText || error.statusText);
   }
 }
 

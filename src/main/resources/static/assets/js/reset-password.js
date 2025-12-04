@@ -67,7 +67,7 @@ function callAPIResetPassword(paramForgotToken, pPasswordObj) {
   let headers = {
     Authorization: "Bearer " + paramForgotToken
   };
-
+  blockUI();
   $.ajax({
     type: "POST",
     headers: headers,
@@ -89,6 +89,7 @@ function callAPIResetPassword(paramForgotToken, pPasswordObj) {
         showToast(3, error.responseText || error.statusText);
       }
     },
+    finally: unblockUI(),
   });
 }
 
@@ -149,22 +150,4 @@ function getTokenInQueryString() {
   const params = new URLSearchParams(window.location.search);
   const vToken = params.get("token");
   return vToken;
-}
-
-// Hàm hiển thị thông báo
-function showToast(paramType, paramMessage) {
-  switch (paramType) {
-    case 1: //success
-      toastr.success(paramMessage);
-      break;
-    case 2: //info
-      toastr.info(paramMessage);
-      break;
-    case 3: //error
-      toastr.error(paramMessage);
-      break;
-    case 4: //warning
-      toastr.warning(paramMessage);
-      break;
-  }
 }

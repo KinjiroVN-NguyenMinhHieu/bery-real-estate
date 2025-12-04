@@ -222,7 +222,7 @@ function callAPIGetAllRegions(paramQueryObj) {
     Authorization: "Bearer " + getAccessToken(),
   };
   const vQueryParams = new URLSearchParams(paramQueryObj);
-
+  blockUI();
   $.ajax({
     url: gBASE_URL + "/region-links?" + vQueryParams.toString(),
     headers: headers,
@@ -235,8 +235,9 @@ function callAPIGetAllRegions(paramQueryObj) {
       createPagination(gCurrentPage + 1);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -245,7 +246,7 @@ function callAPIGetRegionById(paramAccessToken, paramId) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     url: gBASE_URL + "/region-links/" + paramId,
     headers: headers,
@@ -254,8 +255,9 @@ function callAPIGetRegionById(paramAccessToken, paramId) {
       handleLoadDataToForm(res);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -264,7 +266,7 @@ function callAPICreateRegion(paramAccessToken, paramDataObj) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     type: "POST",
     headers: headers,
@@ -277,8 +279,9 @@ function callAPICreateRegion(paramAccessToken, paramDataObj) {
       createPage(1);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -287,7 +290,7 @@ function callAPIUpdateRegion(paramAccessToken, paramId, paramDataObj) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     type: "PUT",
     headers: headers,
@@ -300,8 +303,9 @@ function callAPIUpdateRegion(paramAccessToken, paramId, paramDataObj) {
       createPage(1);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -310,7 +314,7 @@ function callAPIDeleteRegion(paramId, paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     url: gBASE_URL + "/region-links/" + paramId,
     method: "DELETE",
@@ -321,8 +325,9 @@ function callAPIDeleteRegion(paramId, paramAccessToken) {
       createPage(1);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -332,19 +337,20 @@ function callAPIVerifyAdmin(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/verify-admin",
-      method: "GET",
-      headers: headers,
-      success: function(paramData) {
-        if(!paramData) {
-          window.location.href = gHOME_URL;
-        }
-      },
-      error: function(error) {
-        handleError(error);
+    url: gAUTH_URL + "/verify-admin",
+    method: "GET",
+    headers: headers,
+    success: function(paramData) {
+      if(!paramData) {
+        window.location.href = gHOME_URL;
       }
+    },
+    error: function(error) {
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -354,19 +360,20 @@ function callAPIVerifyUser(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/verify",
-      method: "GET",
-      headers: headers,
-      success: function(paramData) {
-        $(".user-name").html(paramData.username);
-        $("#cart-icon .badge").html(paramData.realEstatesCount);
-      },
-      error: function(error) {
-        handleError(error);
-        resetLogin();
-      }
+    url: gAUTH_URL + "/verify",
+    method: "GET",
+    headers: headers,
+    success: function(paramData) {
+      $(".user-name").html(paramData.username);
+      $("#cart-icon .badge").html(paramData.realEstatesCount);
+    },
+    error: function(error) {
+      handleError(error);
+      resetLogin();
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -376,17 +383,18 @@ function callAPILogout(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/logout",
-      method: "PUT",
-      headers: headers,
-      success: function(paramData) {
-        resetLogin();
-      },
-      error: function(error) {
-        handleError(error);
-      }
+    url: gAUTH_URL + "/logout",
+    method: "PUT",
+    headers: headers,
+    success: function(paramData) {
+      resetLogin();
+    },
+    error: function(error) {
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -457,33 +465,6 @@ function resetLogin() {
   Cookies.remove('accessToken');
   sessionStorage.removeItem('accessToken');
   window.location.href = gHOME_URL;
-}
-
-// Hàm hiển thị thông báo
-function showToast(paramType, paramMessage) {
-  switch (paramType) {
-    case 1: //success
-      toastr.success(paramMessage);
-      break;
-    case 2: //info
-      toastr.info(paramMessage);
-      break;
-    case 3: //error
-      toastr.error(paramMessage);
-      break;
-    case 4: //warning
-      toastr.warning(paramMessage);
-      break;
-  }
-}
-
-function handleError(error) {
-  try {
-    const responseObject = JSON.parse(error.responseText);
-    showToast(3, responseObject.message);
-  } catch (e) {
-    showToast(3, error.responseText || error.statusText);
-  }
 }
 
 // ham tao thanh phan trang

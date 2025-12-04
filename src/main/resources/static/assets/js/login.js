@@ -135,6 +135,7 @@ function onBtnSendLink() {
 /*** REGION 4 - Common funtions - Vùng khai báo hàm dùng chung trong toàn bộ chương trình*/
 //api
 function callAPILoginAccount(pAccountObj) {
+  blockUI();
   $.ajax({
     type: "POST",
     url: gBASE_URL + "/login",
@@ -152,12 +153,13 @@ function callAPILoginAccount(pAccountObj) {
         showToast(3, error.statusText);
       }
     },
+    finally: unblockUI(),
   });
 }
 
 function callAPISubmitEmailForgotPassword(paramEmail) {
   $("#forgot-password-spinner").removeClass("d-none");
-
+  blockUI();
   $.ajax({
     type: "POST",
     url: gBASE_URL + "/forgot-password?email=" + paramEmail,
@@ -175,6 +177,7 @@ function callAPISubmitEmailForgotPassword(paramEmail) {
         showToast(3, error.statusText);
       }
     },
+    finally: unblockUI(),
   });
 }
 
@@ -244,20 +247,3 @@ function clearFormSubmitForgotPassword() {
   form.removeClass("was-validated");
 }
 
-// Hàm hiển thị thông báo
-function showToast(paramType, paramMessage) {
-  switch (paramType) {
-    case 1: //success
-      toastr.success(paramMessage);
-      break;
-    case 2: //info
-      toastr.info(paramMessage);
-      break;
-    case 3: //error
-      toastr.error(paramMessage);
-      break;
-    case 4: //warning
-      toastr.warning(paramMessage);
-      break;
-  }
-}

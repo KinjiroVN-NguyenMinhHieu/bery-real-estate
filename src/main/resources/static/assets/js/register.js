@@ -100,6 +100,7 @@ function onBtnSubmitForm() {
 /*** REGION 4 - Common funtions - Vùng khai báo hàm dùng chung trong toàn bộ chương trình*/
 //api
 function callAPIRegisterNewAccount(pNewAccountObj) {
+  blockUI();
   $.ajax({
     type: "POST",
     url: gBASE_URL + "/register",
@@ -121,6 +122,7 @@ function callAPIRegisterNewAccount(pNewAccountObj) {
         showToast(3, error.statusText);
       }
     },
+    finally: unblockUI(),
   });
 }
 
@@ -189,22 +191,4 @@ function clearFormSubmit() {
 
   // Xóa class 'was-validated'
   form.removeClass("was-validated");
-}
-
-// Hàm hiển thị thông báo
-function showToast(paramType, paramMessage) {
-  switch (paramType) {
-    case 1: //success
-      toastr.success(paramMessage);
-      break;
-    case 2: //info
-      toastr.info(paramMessage);
-      break;
-    case 3: //error
-      toastr.error(paramMessage);
-      break;
-    case 4: //warning
-      toastr.warning(paramMessage);
-      break;
-  }
 }

@@ -201,6 +201,7 @@ function onBtnLogout() {
 //Call API
 function callAPIGetAllProvinces() {
   return new Promise((resolve, reject) => {
+    blockUI();
     $.ajax({
       url: URL_API_GET_PROVINCES,
       method: "GET",
@@ -217,12 +218,14 @@ function callAPIGetAllProvinces() {
         }
         reject(error);
       },
+      finally: unblockUI(),
     });
   });
 }
 
 function callAPIGetDistrictsByProvinceId(provinceId) {
   return new Promise((resolve, reject) => {
+    blockUI();
     $.ajax({
       url: URL_API_DISTRICTS_BY_PROVINCE_ID + provinceId,
       method: "GET",
@@ -239,12 +242,14 @@ function callAPIGetDistrictsByProvinceId(provinceId) {
         }
         reject(error);
       },
+      finally: unblockUI(),
     });
   });
 }
 
 function callAPIGetWardsByDistrictId(districtId) {
   return new Promise((resolve, reject) => {
+    blockUI();
     $.ajax({
       url: URL_API_WARDS_BY_DISTRICT_ID + districtId,
       method: "GET",
@@ -261,12 +266,14 @@ function callAPIGetWardsByDistrictId(districtId) {
         }
         reject(error);
       },
+      finally: unblockUI(),
     });
   });
 }
 
 function callAPIGetStreetsByDistrictId(districtId) {
   return new Promise((resolve, reject) => {
+    blockUI();
     $.ajax({
       url: URL_API_STREETS_BY_DISTRICT_ID + districtId,
       method: "GET",
@@ -283,12 +290,14 @@ function callAPIGetStreetsByDistrictId(districtId) {
         }
         reject(error);
       },
+      finally: unblockUI(),
     });
   });
 }
 
 function callAPIGetProjectsByDistrictId(districtId) {
   return new Promise((resolve, reject) => {
+    blockUI();
     $.ajax({
       url: gBASE_URL + "/district/" + districtId + "/projects",
       method: "GET",
@@ -305,6 +314,7 @@ function callAPIGetProjectsByDistrictId(districtId) {
         }
         reject(error);
       },
+      finally: unblockUI(),
     });
   });
 }
@@ -334,7 +344,7 @@ function callAPIAddProperty(paramAccessToken, paramPropertyObj) {
       }
     }
   }
-
+  blockUI();
   $.ajax({
     type: "POST",
     headers: headers,
@@ -354,6 +364,7 @@ function callAPIAddProperty(paramAccessToken, paramPropertyObj) {
         showToast(3, error.responseText || error.statusText);
       }
     },
+    finally: unblockUI(),
   });
 }
 
@@ -363,24 +374,25 @@ function callAPIVerifyUser(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/verify",
-      method: "GET",
-      headers: headers,
-      success: function(paramData) {
-        $("#user-name").html(paramData.username);
-        $("#cart-icon .badge").html(paramData.realEstatesCount);
-      },
-      error: function(error) {
-        try {
-          const responseObject = JSON.parse(error.responseText);
-          showToast(3, responseObject.message);
-        } catch (e) {
-          showToast(3, error.responseText || error.statusText);
-        }
-        resetLogin();
+    url: gAUTH_URL + "/verify",
+    method: "GET",
+    headers: headers,
+    success: function(paramData) {
+      $("#user-name").html(paramData.username);
+      $("#cart-icon .badge").html(paramData.realEstatesCount);
+    },
+    error: function(error) {
+      try {
+        const responseObject = JSON.parse(error.responseText);
+        showToast(3, responseObject.message);
+      } catch (e) {
+        showToast(3, error.responseText || error.statusText);
       }
+      resetLogin();
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -390,7 +402,7 @@ function callAPIVerifyAdmin(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     url: gAUTH_URL + "/verify-admin",
     method: "GET",
@@ -407,7 +419,8 @@ function callAPIVerifyAdmin(paramAccessToken) {
       } catch (e) {
         showToast(3, error.responseText || error.statusText);
       }
-    }
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -417,22 +430,23 @@ function callAPILogout(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/logout",
-      method: "PUT",
-      headers: headers,
-      success: function(paramData) {
-        resetLogin();
-      },
-      error: function(error) {
-        try {
-          const responseObject = JSON.parse(error.responseText);
-          showToast(3, responseObject.message);
-        } catch (e) {
-          showToast(3, error.responseText || error.statusText);
-        }
+    url: gAUTH_URL + "/logout",
+    method: "PUT",
+    headers: headers,
+    success: function(paramData) {
+      resetLogin();
+    },
+    error: function(error) {
+      try {
+        const responseObject = JSON.parse(error.responseText);
+        showToast(3, responseObject.message);
+      } catch (e) {
+        showToast(3, error.responseText || error.statusText);
       }
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -634,22 +648,4 @@ function resetLogin() {
   Cookies.remove('accessToken');
   sessionStorage.removeItem('accessToken');
   window.location.href = gHOME_URL;
-}
-
-// Hàm hiển thị thông báo
-function showToast(paramType, paramMessage) {
-  switch (paramType) {
-    case 1: //success
-      toastr.success(paramMessage);
-      break;
-    case 2: //info
-      toastr.info(paramMessage);
-      break;
-    case 3: //error
-      toastr.error(paramMessage);
-      break;
-    case 4: //warning
-      toastr.warning(paramMessage);
-      break;
-  }
 }

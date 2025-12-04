@@ -247,7 +247,7 @@ function callAPIGetAllEmployees(paramQueryObj) {
     Authorization: "Bearer " + getAccessToken()
   };
   const vQueryParams = new URLSearchParams(paramQueryObj);
-
+  blockUI();
   $.ajax({
     url: gBASE_URL + "/employees?" + vQueryParams.toString(),
     headers: headers,
@@ -260,8 +260,9 @@ function callAPIGetAllEmployees(paramQueryObj) {
       createPagination(gCurrentPage + 1);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -270,7 +271,7 @@ function callAPIGetEstatesById(paramAccessToken, paramId) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     url: gBASE_URL + "/employees/" + paramId,
     headers: headers,
@@ -279,8 +280,9 @@ function callAPIGetEstatesById(paramAccessToken, paramId) {
       handleLoadDataToForm(res);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -289,7 +291,7 @@ function callAPICreateProject(paramAccessToken, paramEmployeeObj) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     type: "POST",
     headers: headers,
@@ -302,8 +304,9 @@ function callAPICreateProject(paramAccessToken, paramEmployeeObj) {
       createPage(1);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -312,7 +315,7 @@ function callAPIUpdateProject(paramAccessToken, paramId, paramEmployeeObj) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     type: "PUT",
     headers: headers,
@@ -325,8 +328,9 @@ function callAPIUpdateProject(paramAccessToken, paramId, paramEmployeeObj) {
       createPage(1);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -335,7 +339,7 @@ function callAPIDeleteProject(paramId, paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     url: gBASE_URL + "/employees/" + paramId,
     method: "DELETE",
@@ -346,8 +350,9 @@ function callAPIDeleteProject(paramId, paramAccessToken) {
       createPage(1);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -357,19 +362,20 @@ function callAPIVerifyAdmin(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/verify-admin",
-      method: "GET",
-      headers: headers,
-      success: function(paramData) {
-        if(!paramData) {
-          window.location.href = gHOME_URL;
-        }
-      },
-      error: function(error) {
-        handleError(error);
-      },
+    url: gAUTH_URL + "/verify-admin",
+    method: "GET",
+    headers: headers,
+    success: function(paramData) {
+      if(!paramData) {
+        window.location.href = gHOME_URL;
+      }
+    },
+    error: function(error) {
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -379,19 +385,20 @@ function callAPIVerifyUser(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/verify",
-      method: "GET",
-      headers: headers,
-      success: function(paramData) {
-        $(".user-name").html(paramData.username);
-        $("#cart-icon .badge").html(paramData.realEstatesCount);
-      },
-      error: function(error) {
-        handleError(error);
-        resetLogin();
-      }
+    url: gAUTH_URL + "/verify",
+    method: "GET",
+    headers: headers,
+    success: function(paramData) {
+      $(".user-name").html(paramData.username);
+      $("#cart-icon .badge").html(paramData.realEstatesCount);
+    },
+    error: function(error) {
+      handleError(error);
+      resetLogin();
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -401,17 +408,18 @@ function callAPILogout(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/logout",
-      method: "PUT",
-      headers: headers,
-      success: function(paramData) {
-        resetLogin();
-      },
-      error: function(error) {
-        handleError(error);
-      },
+    url: gAUTH_URL + "/logout",
+    method: "PUT",
+    headers: headers,
+    success: function(paramData) {
+      resetLogin();
+    },
+    error: function(error) {
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -533,33 +541,6 @@ function convertDateFormat(paramDateString) {
   if (paramDateString) {
     const dateParts = paramDateString.split("-");
     return dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
-  }
-}
-
-// Hàm hiển thị thông báo
-function showToast(paramType, paramMessage) {
-  switch (paramType) {
-    case 1: //success
-      toastr.success(paramMessage);
-      break;
-    case 2: //info
-      toastr.info(paramMessage);
-      break;
-    case 3: //error
-      toastr.error(paramMessage);
-      break;
-    case 4: //warning
-      toastr.warning(paramMessage);
-      break;
-  }
-}
-
-function handleError(error) {
-  try {
-    const responseObject = JSON.parse(error.responseText);
-    showToast(3, responseObject.message);
-  } catch (e) {
-    showToast(3, error.responseText || error.statusText);
   }
 }
 

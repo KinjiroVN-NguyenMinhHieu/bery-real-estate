@@ -101,6 +101,7 @@ function onBtnLogout() {
 /*** REGION 4 - Common funtions - Vùng khai báo hàm dùng chung trong toàn bộ chương trình*/
 //api
 function callAPISubmitCustomer(paramCustomerObj) {
+  blockUI();
   $.ajax({
     type: "POST",
     url: gBASE_URL + "/customers",
@@ -119,6 +120,7 @@ function callAPISubmitCustomer(paramCustomerObj) {
         showToast(3, error.responseText || error.statusText);
       }
     },
+    finally: unblockUI(),
   });
 }
 
@@ -128,24 +130,25 @@ function callAPIVerifyUser(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/verify",
-      method: "GET",
-      headers: headers,
-      success: function(paramData) {
-        $("#user-name").html(paramData.username);
-        $("#cart-icon .badge").html(paramData.realEstatesCount);
-      },
-      error: function(error) {
-        try {
-          const responseObject = JSON.parse(error.responseText);
-          showToast(3, responseObject.message);
-        } catch (e) {
-          showToast(3, error.responseText || error.statusText);
-        }
-        resetLogin();
+    url: gAUTH_URL + "/verify",
+    method: "GET",
+    headers: headers,
+    success: function(paramData) {
+      $("#user-name").html(paramData.username);
+      $("#cart-icon .badge").html(paramData.realEstatesCount);
+    },
+    error: function(error) {
+      try {
+        const responseObject = JSON.parse(error.responseText);
+        showToast(3, responseObject.message);
+      } catch (e) {
+        showToast(3, error.responseText || error.statusText);
       }
+      resetLogin();
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -155,7 +158,7 @@ function callAPIVerifyAdmin(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     url: gAUTH_URL + "/verify-admin",
     method: "GET",
@@ -172,7 +175,8 @@ function callAPIVerifyAdmin(paramAccessToken) {
       } catch (e) {
         showToast(3, error.responseText || error.statusText);
       }
-    }
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -182,22 +186,23 @@ function callAPILogout(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/logout",
-      method: "PUT",
-      headers: headers,
-      success: function(paramData) {
-        resetLogin();
-      },
-      error: function(error) {
-        try {
-          const responseObject = JSON.parse(error.responseText);
-          showToast(3, responseObject.message);
-        } catch (e) {
-          showToast(3, error.responseText || error.statusText);
-        }
+    url: gAUTH_URL + "/logout",
+    method: "PUT",
+    headers: headers,
+    success: function(paramData) {
+      resetLogin();
+    },
+    error: function(error) {
+      try {
+        const responseObject = JSON.parse(error.responseText);
+        showToast(3, responseObject.message);
+      } catch (e) {
+        showToast(3, error.responseText || error.statusText);
       }
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -252,22 +257,4 @@ function resetLogin() {
   Cookies.remove('accessToken');
   sessionStorage.removeItem('accessToken');
   window.location.href = gHOME_URL;
-}
-
-// Hàm hiển thị thông báo
-function showToast(paramType, paramMessage) {
-  switch (paramType) {
-    case 1: //success
-      toastr.success(paramMessage);
-      break;
-    case 2: //info
-      toastr.info(paramMessage);
-      break;
-    case 3: //error
-      toastr.error(paramMessage);
-      break;
-    case 4: //warning
-      toastr.warning(paramMessage);
-      break;
-  }
 }

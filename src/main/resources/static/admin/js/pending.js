@@ -219,6 +219,7 @@ function callAPIGetAllRealEstatesByStatus(paramQueryObj) {
     Authorization: "Bearer " + getAccessToken()
   };
   const vQueryParams = new URLSearchParams(paramQueryObj);
+  blockUI();
   $.ajax({
     url: gBASE_URL + "/real-estates/pending?" + vQueryParams.toString(),
     headers: headers,
@@ -231,12 +232,14 @@ function callAPIGetAllRealEstatesByStatus(paramQueryObj) {
       createPagination(gCurrentPage + 1);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
 function callAPIGetAllProvinces() {
+  blockUI();
   $.ajax({
     url: URL_API_GET_PROVINCES,
     method: "GET",
@@ -244,12 +247,14 @@ function callAPIGetAllProvinces() {
       loadDataToProvinceSelect(res);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
 function callAPIGetRealEstateById(paramId) {
+  blockUI();
   $.ajax({
     url: gBASE_URL + "/real-estates/" + paramId,
     method: "GET",
@@ -257,13 +262,15 @@ function callAPIGetRealEstateById(paramId) {
       handleLoadDataToForm(res);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
 function callAPIGetDistrictsByProvinceId(provinceId) {
   return new Promise((resolve, reject) => {
+    blockUI();
     $.ajax({
       url: URL_API_DISTRICTS_BY_PROVINCE_ID + provinceId,
       method: "GET",
@@ -275,12 +282,14 @@ function callAPIGetDistrictsByProvinceId(provinceId) {
         handleError(error);
         reject(error);
       },
+      finally: unblockUI(),
     });
   });
 }
 
 function callAPIGetWardsByDistrictId(districtId) {
   return new Promise((resolve, reject) => {
+    blockUI();
     $.ajax({
       url: URL_API_WARDS_BY_DISTRICT_ID + districtId,
       method: "GET",
@@ -292,12 +301,14 @@ function callAPIGetWardsByDistrictId(districtId) {
         handleError(error);
         reject(error);
       },
+      finally: unblockUI(),
     });
   });
 }
 
 function callAPIGetStreetsByDistrictId(districtId) {
   return new Promise((resolve, reject) => {
+    blockUI();
     $.ajax({
       url: URL_API_STREETS_BY_DISTRICT_ID + districtId,
       method: "GET",
@@ -309,12 +320,14 @@ function callAPIGetStreetsByDistrictId(districtId) {
         handleError(error);
         reject(error);
       },
+      finally: unblockUI(),
     });
   });
 }
 
 function callAPIGetProjectsByDistrictId(districtId) {
   return new Promise((resolve, reject) => {
+    blockUI();
     $.ajax({
       url: gBASE_URL + "/district/" + districtId + "/projects",
       method: "GET",
@@ -326,6 +339,7 @@ function callAPIGetProjectsByDistrictId(districtId) {
         handleError(error);
         reject(error);
       },
+      finally: unblockUI(),
     });
   });
 }
@@ -336,19 +350,20 @@ function callAPIVerifyAdmin(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/verify-admin",
-      method: "GET",
-      headers: headers,
-      success: function(paramData) {
-        if(!paramData) {
-          window.location.href = gHOME_URL;
-        }
-      },
-      error: function(error) {
-        handleError(error);
-      },
+    url: gAUTH_URL + "/verify-admin",
+    method: "GET",
+    headers: headers,
+    success: function(paramData) {
+      if(!paramData) {
+        window.location.href = gHOME_URL;
+      }
+    },
+    error: function(error) {
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -358,19 +373,20 @@ function callAPIVerifyUser(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/verify",
-      method: "GET",
-      headers: headers,
-      success: function(paramData) {
-        $(".user-name").html(paramData.username);
-        $("#cart-icon .badge").html(paramData.realEstatesCount);
-      },
-      error: function(error) {
-        handleError(error);
-        resetLogin();
-      }
+    url: gAUTH_URL + "/verify",
+    method: "GET",
+    headers: headers,
+    success: function(paramData) {
+      $(".user-name").html(paramData.username);
+      $("#cart-icon .badge").html(paramData.realEstatesCount);
+    },
+    error: function(error) {
+      handleError(error);
+      resetLogin();
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -380,7 +396,7 @@ function callAPIApproveProperty(paramId, paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     url: gBASE_URL + "/real-estates/approve/" + paramId,
     method: "POST",
@@ -391,8 +407,9 @@ function callAPIApproveProperty(paramId, paramAccessToken) {
       createPage(1);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -402,7 +419,7 @@ function callAPIRejectProperty(paramId, paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
     url: gBASE_URL + "/real-estates/reject/" + paramId,
     method: "POST",
@@ -413,8 +430,9 @@ function callAPIRejectProperty(paramId, paramAccessToken) {
       createPage(1);
     },
     error: function(error) {
-        handleError(error);
-      },
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -424,17 +442,18 @@ function callAPILogout(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-
+  blockUI();
   $.ajax({
-      url: gAUTH_URL + "/logout",
-      method: "PUT",
-      headers: headers,
-      success: function(paramData) {
-        resetLogin();
-      },
-      error: function(error) {
-        handleError(error);
-      },
+    url: gAUTH_URL + "/logout",
+    method: "PUT",
+    headers: headers,
+    success: function(paramData) {
+      resetLogin();
+    },
+    error: function(error) {
+      handleError(error);
+    },
+    finally: unblockUI(),
   });
 }
 
@@ -652,33 +671,6 @@ function convertDateFormat(paramDateString) {
   if (paramDateString) {
     const dateParts = paramDateString.split("-");
     return dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
-  }
-}
-
-// Hàm hiển thị thông báo
-function showToast(paramType, paramMessage) {
-  switch (paramType) {
-    case 1: //success
-      toastr.success(paramMessage);
-      break;
-    case 2: //info
-      toastr.info(paramMessage);
-      break;
-    case 3: //error
-      toastr.error(paramMessage);
-      break;
-    case 4: //warning
-      toastr.warning(paramMessage);
-      break;
-  }
-}
-
-function handleError(error) {
-  try {
-    const responseObject = JSON.parse(error.responseText);
-    showToast(3, responseObject.message);
-  } catch (e) {
-    showToast(3, error.responseText || error.statusText);
   }
 }
 
