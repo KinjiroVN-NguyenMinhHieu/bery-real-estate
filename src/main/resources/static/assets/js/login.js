@@ -152,8 +152,8 @@ function callAPILoginAccount(pAccountObj) {
       } else {
         showToast(3, error.statusText);
       }
+      unblockUI();
     },
-    finally: unblockUI(),
   });
 }
 
@@ -167,6 +167,7 @@ function callAPISubmitEmailForgotPassword(paramEmail) {
       $("#forgot-password-spinner").addClass("d-none");
       showToast(1, "Send email reset password successfully\nPlease check your email to reset password");
       $("#forgot-password-modal").modal('hide');
+      unblockUI();
     },
     error: function (error) {
       $("#forgot-password-spinner").addClass("d-none");
@@ -176,8 +177,8 @@ function callAPISubmitEmailForgotPassword(paramEmail) {
       } else {
         showToast(3, error.statusText);
       }
+      unblockUI();
     },
-    finally: unblockUI(),
   });
 }
 
@@ -191,6 +192,7 @@ function handleLoginSuccess(paramData) {
   showToast(1, "Login Account successfully");
   setTimeout(() => {
     window.location.href = gHOME_URL;
+    unblockUI();
   }, 1000);
 }
 

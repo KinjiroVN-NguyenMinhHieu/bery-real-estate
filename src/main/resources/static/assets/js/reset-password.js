@@ -79,6 +79,7 @@ function callAPIResetPassword(paramForgotToken, pPasswordObj) {
       clearFormSubmit();
       setTimeout(() => {
         window.location.href = gLOGIN_URL;
+        unblockUI();
       }, 1000);
     },
     error: function (error) {
@@ -88,8 +89,8 @@ function callAPIResetPassword(paramForgotToken, pPasswordObj) {
       } catch (e) {
         showToast(3, error.responseText || error.statusText);
       }
+      unblockUI();
     },
-    finally: unblockUI(),
   });
 }
 

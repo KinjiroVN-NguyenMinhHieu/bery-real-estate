@@ -120,37 +120,39 @@ $(document).ready(function () {
 /*** REGION 3 - Event handlers - Vùng khai báo các hàm xử lý sự kiện */
 async function onPageLoading() {
   const accessToken = getAccessToken();
+  blockUI();
   if (accessToken) {
     $("#login-icon").addClass("d-none")
     $("#user-icon").removeClass("d-none")
     $("#cart-icon").removeClass("d-none")
     callAPIVerifyUser(accessToken);
     callAPIVerifyAdmin(accessToken);
+    try {
+      await callAPIGetAllProvinces();
+      const provinceId = $("#select-province").val();
+      if (provinceId !== "") {
+        await callAPIGetDistrictsByProvinceId(provinceId);
+        const districtId = $("#select-district").val();
+        if (districtId !== "") {
+          callAPIGetWardsByDistrictId(districtId);
+          callAPIGetStreetsByDistrictId(districtId);
+          callAPIGetProjectsByDistrictId(districtId);
+        }
+      }
+    } catch (error) {
+      try {
+        const responseObject = JSON.parse(error.responseText);
+        showToast(3, responseObject.message);
+      } catch (e) {
+        showToast(3, error.responseText || error.statusText);
+      }
+    }
   } else {
     showToast(3, "You need to login to perform this feature");
     setTimeout(() => {
       window.location.href = gLOGIN_URL;
+      unblockUI();
     }, 1000);
-  }
-  try {
-    await callAPIGetAllProvinces();
-    const provinceId = $("#select-province").val();
-    if (provinceId !== "") {
-      await callAPIGetDistrictsByProvinceId(provinceId);
-      const districtId = $("#select-district").val();
-      if (districtId !== "") {
-        callAPIGetWardsByDistrictId(districtId);
-        callAPIGetStreetsByDistrictId(districtId);
-        callAPIGetProjectsByDistrictId(districtId);
-      }
-    }
-  } catch (error) {
-    try {
-      const responseObject = JSON.parse(error.responseText);
-      showToast(3, responseObject.message);
-    } catch (e) {
-      showToast(3, error.responseText || error.statusText);
-    }
   }
 }
 
@@ -374,7 +376,6 @@ function callAPIVerifyUser(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-  blockUI();
   $.ajax({
     url: gAUTH_URL + "/verify",
     method: "GET",
@@ -392,7 +393,6 @@ function callAPIVerifyUser(paramAccessToken) {
       }
       resetLogin();
     },
-    finally: unblockUI(),
   });
 }
 
@@ -402,7 +402,6 @@ function callAPIVerifyAdmin(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-  blockUI();
   $.ajax({
     url: gAUTH_URL + "/verify-admin",
     method: "GET",
@@ -420,7 +419,6 @@ function callAPIVerifyAdmin(paramAccessToken) {
         showToast(3, error.responseText || error.statusText);
       }
     },
-    finally: unblockUI(),
   });
 }
 

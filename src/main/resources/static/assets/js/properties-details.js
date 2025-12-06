@@ -470,6 +470,7 @@ function callAPIDeleteRealEstateById(paramId, paramAccessToken) {
       showToast(1, "Delete Property successfully!");
       setTimeout(() => {
         history.back();
+        unblockUI();
       }, 1000);
     },
     error: function (error) {
@@ -480,7 +481,6 @@ function callAPIDeleteRealEstateById(paramId, paramAccessToken) {
         showToast(3, error.responseText || error.statusText);
       }
     },
-    finally: unblockUI(),
   });
 }
 
@@ -499,6 +499,7 @@ function callAPICompleteRealEstateById(paramId, paramAccessToken) {
       showToast(1, "Complete Property successfully!");
       setTimeout(() => {
         history.back();
+        unblockUI();
       }, 1000);
     },
     error: function (error) {
@@ -509,7 +510,6 @@ function callAPICompleteRealEstateById(paramId, paramAccessToken) {
         showToast(3, error.responseText || error.statusText);
       }
     },
-    finally: unblockUI(),
   });
 }
 
@@ -528,6 +528,7 @@ function callAPIRestoreRealEstateById(paramId, paramAccessToken) {
       showToast(1, "Restore Property successfully!");
       setTimeout(() => {
         history.back();
+        unblockUI();
       }, 1000);
     },
     error: function (error) {
@@ -538,7 +539,6 @@ function callAPIRestoreRealEstateById(paramId, paramAccessToken) {
         showToast(3, error.responseText || error.statusText);
       }
     },
-    finally: unblockUI(),
   });
 }
 

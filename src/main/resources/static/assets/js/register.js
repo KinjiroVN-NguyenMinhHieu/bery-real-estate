@@ -112,6 +112,7 @@ function callAPIRegisterNewAccount(pNewAccountObj) {
       clearFormSubmit();
       setTimeout(() => {
         window.location.href = gLOGIN_URL;
+        unblockUI();
       }, 1000);
     },
     error: function (error) {
@@ -121,8 +122,8 @@ function callAPIRegisterNewAccount(pNewAccountObj) {
       } else {
         showToast(3, error.statusText);
       }
+      unblockUI();
     },
-    finally: unblockUI(),
   });
 }
 

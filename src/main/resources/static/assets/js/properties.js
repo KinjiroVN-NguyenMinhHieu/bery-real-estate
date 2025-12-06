@@ -89,6 +89,7 @@ $(document).ready(function () {
 /*** REGION 3 - Event handlers - Vùng khai báo các hàm xử lý sự kiện */
 async function onPageLoading() {
   const accessToken = getAccessToken();
+  blockUI();
   if (accessToken) {
     $("#login-icon").addClass("d-none")
     $("#user-icon").removeClass("d-none")
@@ -246,7 +247,6 @@ function callAPISearchAndFilterRealEstatesPagination(
 //api province
 function callAPIGetAllProvinces() {
   return new Promise(function(resolve, reject) {
-    blockUI();
     $.ajax({
       url: URL_API_GET_PROVINCES,
       method: "GET",
@@ -263,7 +263,6 @@ function callAPIGetAllProvinces() {
         }
         reject(error);
       },
-      finally: unblockUI(),
     });
   });
 }
@@ -274,7 +273,6 @@ function callAPIVerifyUser(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-  blockUI();
   $.ajax({
     url: gAUTH_URL + "/verify",
     method: "GET",
@@ -292,7 +290,6 @@ function callAPIVerifyUser(paramAccessToken) {
       }
       resetLogin();
     },
-    finally: unblockUI(),
   });
 }
 
@@ -302,7 +299,6 @@ function callAPIVerifyAdmin(paramAccessToken) {
   let headers = {
     Authorization: "Bearer " + paramAccessToken
   };
-  blockUI();
   $.ajax({
     url: gAUTH_URL + "/verify-admin",
     method: "GET",
@@ -320,7 +316,6 @@ function callAPIVerifyAdmin(paramAccessToken) {
         showToast(3, error.responseText || error.statusText);
       }
     },
-    finally: unblockUI(),
   });
 }
 
